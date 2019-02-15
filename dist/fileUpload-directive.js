@@ -148,16 +148,14 @@
                 }
 
                 function uploadFile() {
-                    var file = getFile();
-
                     var formData = new FormData();
                     formData.append("file", getFile());
 
                     if (attr.fileParams) {
-                        var parameters = scope.$eval(attr.fileParams);
+                        var parameters = JSON.parse(attr.fileParams);
                         if (typeof parameters === 'object') {
-                            angular.forEach(parameters, function (val, key) {
-                                formData.append(key, val);
+                            angular.forEach(parameters, function (value, key) {
+                                formData.append(key, value);
                             });
                         }
                     }
@@ -184,10 +182,9 @@
 
                     xhr.open("POST", fileUploadConfig.back_rest + attr.filePath);
                     if (attr.fileHeaders) {
-                        var headers = scope.$eval(attr.fileHeaders);
+                        var headers = JSON.parse(attr.fileHeaders);
                         if (typeof headers === 'object') {
-                            angular.forEach(headers, function (val, key) {
-                                var value = scope.$eval(val);
+                            angular.forEach(headers, function (value, key) {
                                 xhr.setRequestHeader(key, value);
                             });
                         }
