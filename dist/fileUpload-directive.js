@@ -21,7 +21,7 @@
     function fileUpload($log, $window, $translate, fileUploadConfig) {
         function extension(name) {
             var aux = name.split('.');
-            return aux.length > 1 ? aux[aux.length - 1].toLowerCase() : null;
+            return aux.length > 1 ? aux[aux.length - 1] : null;
         }
         return {
             restrict: 'A',
@@ -30,7 +30,7 @@
                     formFake,
                     filename,
                     files,
-                    filePattern = '^[\w\-. ]+';
+                    filePattern = '^[\\w\\-. ]+';
 
                 var dropable = attr.fileEvent && (attr.fileEvent === 'drop' || attr.fileEvent === 'both');
                 var clickable = !attr.fileEvent || (attr.fileEvent && attr.fileEvent === 'both');
@@ -130,7 +130,7 @@
                     }
                     pattern += '$';
                     var regex = new RegExp(pattern);
-                    if (!ext || filename.search(regex) === -1) {
+                    if (!ext || filename.toLowerCase().search(regex) === -1) {
                         $translate('BAD_FILE_EXT').then(function (error) {
                             $log.error(error)
                         });
