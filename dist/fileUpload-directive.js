@@ -29,7 +29,8 @@
                 var input,
                     formFake,
                     filename,
-                    files;
+                    files,
+                    filePattern = '^[\w\-. ]+';
 
                 var dropable = attr.fileEvent && (attr.fileEvent === 'drop' || attr.fileEvent === 'both');
                 var clickable = !attr.fileEvent || (attr.fileEvent && attr.fileEvent === 'both');
@@ -38,7 +39,7 @@
 
                 if (attr.fileExtensions) {
                     attr.$observe('fileExtensions', function (val) {
-                        extensions = val.match(/[a-z]{3}/gs);
+                        extensions = val.match(/[a-z0-9]+/gs);
                     });
                 }
 
@@ -115,11 +116,21 @@
                     return files[0];
                 }
 
+                function addpoint(ext) {
+                    return '.' + ext;
+                }
+
                 function checkFile() {
                     var file = getFile();
                     filename = file.name || '';
                     var ext = extension(filename);
-                    if (!ext || (extensions instanceof Array && extensions.length && extensions.indexOf(ext) === -1)) {
+                    var pattern = filePattern;
+                    if (extensions instanceof Array && extensions.length) {
+                        pattern += '(' + extensions.map(addpoint).join('|') + ')';
+                    }
+                    pattern += '$';
+                    var regex = new RegExp(pattern);
+                    if (!ext || filename.search(regex) === -1) {
                         $translate('BAD_FILE_EXT').then(function (error) {
                             $log.error(error)
                         });
