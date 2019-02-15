@@ -21,7 +21,7 @@
     function fileUpload($log, $window, $translate, fileUploadConfig) {
         function extension(name) {
             var aux = name.split('.');
-            return aux.length > 1 ? aux[aux.length - 1] : null;
+            return aux.length > 1 ? aux[aux.length - 1].toLowerCase() : null;
         }
         return {
             restrict: 'A',
@@ -38,7 +38,7 @@
 
                 if (attr.fileExtensions) {
                     attr.$observe('fileExtensions', function (val) {
-                        extensions = scope.$eval(val);
+                        extensions = val.match(/[a-z]{3}/gs);
                     });
                 }
 
